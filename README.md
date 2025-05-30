@@ -1,4 +1,3 @@
-```markdown
 # textify
 
 ## Overview
@@ -15,6 +14,7 @@ To install the necessary dependencies, run:
 ```bash
 cargo build --release
 ```
+
 To install the tool globally, use:
 ```bash
 cargo install --path .
