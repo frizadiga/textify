@@ -1,6 +1,6 @@
 [package]
 name = "textify"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2024"
 description = "Convert git repository to a text file"
 license = "MIT"
@@ -21,4 +21,5 @@ walkdir = "2.4"
 indicatif = "0.17"
 console = "0.15"
 regex = "1.10"
-
+rayon = "1.8"
+memmap2 = "0.9"
