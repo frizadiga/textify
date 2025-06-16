@@ -33,7 +33,7 @@ pub fn get_repo_name(repo_path: &Path) -> Result<String> {
         .file_name()
         .and_then(|name| name.to_str())
         .map(|s| s.to_string())
-        .ok_or_else(|| anyhow!("Could not determine repository directory name"))
+        .ok_or_else(|| anyhow!("Could not determine repository directory name"));
 }
 
 /// Format file size in human-readable format

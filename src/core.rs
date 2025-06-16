@@ -1,12 +1,12 @@
-use utils::{format_use anyhow::{Result, anyhow};
-use clap::Parser;
+use anyhow::Result;
 use console::style;
 use indicatif::{ProgressBar, ProgressStyle};
-use std::env;
 use std::fs;
 use std::io::Write;
-use std::path::{Path, PathBuf};
-use walkdir::WalkDir;file_size, get_repo_name, is_binary_file, should_exclude_file};
+use std::path::Path;
+use walkdir::WalkDir;
+
+use crate::utils;
 
 /// Convert the repository to text files
 pub fn convert_repository_to_text(
@@ -29,7 +29,7 @@ pub fn convert_repository_to_text(
         let path = entry.path();
 
         // Skip excluded directories and files
-        if should_exclude_file(path) {
+        if utils::should_exclude_file(path) {
             if debug {
                 println!("Skipping excluded file: {}", path.display());
             }
@@ -60,7 +60,7 @@ pub fn convert_repository_to_text(
         // Check if file should be included
         if !include_all {
             // Skip binary files
-            if is_binary_file(&file_path)? {
+            if utils::is_binary_file(&file_path)? {
                 if debug {
                     println!("Skipping binary file: {}", relative_path.display());
                 }
@@ -75,7 +75,7 @@ pub fn convert_repository_to_text(
                     println!(
                         "Skipping large file: {} ({})",
                         relative_path.display(),
-                        format_file_size(file_size)
+                        utils::format_file_size(file_size)
                     );
                 }
                 skipped_files += 1;
@@ -87,7 +87,7 @@ pub fn convert_repository_to_text(
         // Write file header section
         writeln!(output_file, "{}", "=".repeat(80))?;
         writeln!(output_file, "File: {}", relative_path.display())?;
-        writeln!(output_file, "Size: {}", format_file_size(file_size))?;
+        writeln!(output_file, "Size: {}", utils::format_file_size(file_size))?;
         writeln!(output_file, "{}", "=".repeat(80))?;
         writeln!(output_file)?;
 
