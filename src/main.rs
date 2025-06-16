@@ -35,15 +35,27 @@ struct Args {
     /// Enable debug mode with verbose logging
     #[arg(long)]
     debug: bool,
+
+    /// Enable performance profiling
+    #[arg(long)]
+    perf: bool,
 }
 
 fn main() -> Result<()> {
-    let timer = perf::Timer::new("fn main");
-
     let args = Args::parse();
+
+    let main_timer = if args.perf {
+        Some(perf::Timer::new("Application startup"))
+    } else {
+        None
+    };
 
     if args.debug {
         println!("{}", style("Debug mode enabled").cyan());
+    }
+
+    if args.perf {
+        println!("{}", style("Performance profiling enabled").cyan());
     }
 
     let repo_path = PathBuf::from(&args.path);
@@ -75,6 +87,10 @@ fn main() -> Result<()> {
         println!("Output file: {}", output_path);
     }
 
+    if let Some(timer) = main_timer {
+        timer.print_elapsed();
+    }
+
     println!(
         "📂 {}",
         style(format!("Processing repository: {}", repo_name)).green()
@@ -86,6 +102,7 @@ fn main() -> Result<()> {
         args.threshold,
         args.include_all,
         args.debug,
+        args.perf,
     )?;
 
     println!(
@@ -98,7 +115,5 @@ fn main() -> Result<()> {
         .bold()
     );
 
-    timer.print_elapsed();
-
-    return Ok(());
+    Ok(())
 }
