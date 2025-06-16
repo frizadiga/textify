@@ -5,6 +5,7 @@ use std::env;
 use std::path::PathBuf;
 
 mod core;
+mod perf;
 mod utils;
 
 #[derive(Parser)]
@@ -37,6 +38,8 @@ struct Args {
 }
 
 fn main() -> Result<()> {
+    let timer = perf::Timer::new("fn main");
+
     let args = Args::parse();
 
     if args.debug {
@@ -95,5 +98,7 @@ fn main() -> Result<()> {
         .bold()
     );
 
-    Ok(())
+    timer.print_elapsed();
+
+    return Ok(());
 }
