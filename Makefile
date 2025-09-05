@@ -8,7 +8,7 @@ build:
 	cargo build
 
 dev:
-	cargo run
+	cargo run -- --perf
 
 test:
 	cargo test

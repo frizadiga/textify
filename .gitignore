@@ -22,3 +22,6 @@ target/
 
 # Textify generated file
 *.textify.txt
+
+# Performance profiling log
+perf.log
