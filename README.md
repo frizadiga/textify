@@ -32,6 +32,9 @@ textify -- [OPTIONS]
 - `--output <OUTPUT>`: Specify the output file path.
 - `--threshold <THRESHOLD>`: Set the file size threshold in MB (default is 0.1 MB).
 - `--include-all`: Include all files regardless of size or type.
+- By default, `textify` excludes files matched by `.gitignore`.
+- `--no-respect-gitignore`: Disable `.gitignore` filtering and include those files.
+- Hidden files (like `.env.example`) are included by default unless excluded by ignore rules.
 - `--debug`: Enable debug mode with verbose logging.
 
 ### Example
@@ -41,4 +44,3 @@ cargo run -- --path /path/to/repo --output output.txt --threshold 1.0
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a pull request or raise an issue.
-

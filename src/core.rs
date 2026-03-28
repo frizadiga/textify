@@ -1,10 +1,10 @@
 use anyhow::Result;
 use console::style;
+use ignore::WalkBuilder;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::fs;
 use std::io::Write;
 use std::path::Path;
-use walkdir::WalkDir;
 
 use crate::utils;
 
@@ -14,6 +14,7 @@ pub fn convert_repository_to_text(
     output_path: &str,
     threshold_mb: f64,
     include_all: bool,
+    respect_gitignore: bool,
     debug: bool,
 ) -> Result<()> {
     let mut output_file = fs::File::create(output_path)?;
@@ -21,11 +22,17 @@ pub fn convert_repository_to_text(
 
     // Collect all files first to show progress
     let mut files = Vec::new();
-    for entry in WalkDir::new(repo_path)
-        .into_iter()
-        .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_file())
-    {
+    let mut walk_builder = WalkBuilder::new(repo_path);
+    walk_builder.git_ignore(respect_gitignore);
+    walk_builder.git_exclude(respect_gitignore);
+    walk_builder.git_global(respect_gitignore);
+    walk_builder.hidden(false);
+
+    for entry in walk_builder.build().filter_map(|e| e.ok()) {
+        if !entry.file_type().is_some_and(|ft| ft.is_file()) {
+            continue;
+        }
+
         let path = entry.path();
 
         // Skip excluded directories and files

@@ -31,6 +31,10 @@ struct Args {
     #[arg(long)]
     include_all: bool,
 
+    /// Do not exclude files matched by .gitignore (disabled by default)
+    #[arg(long)]
+    no_respect_gitignore: bool,
+
     /// Enable debug mode with verbose logging
     #[arg(long)]
     debug: bool,
@@ -82,6 +86,7 @@ fn main() -> Result<()> {
         &output_path,
         args.threshold,
         args.include_all,
+        !args.no_respect_gitignore,
         args.debug,
     )?;
 
